@@ -140,6 +140,80 @@ public:
   ASIO_DECL asio::error_code set_options(options o,
       asio::error_code& ec);
 
+  /// Set the callback used to generate dtls cookies
+  /**
+   * This function is used to specify a callback function that will be called
+   * by the implementation when it needs to generate a dtls cookie.
+   *
+   * @param callback The function object to be used for generating a cookie.
+   * The function signature of the handler must be:
+   * @code bool generate_callback(
+   *   asio::const_buffer & // A buffer containing a cookie
+   * ); @endcode
+   *
+   * @throws asio::system_error Thrown on failure.
+   *
+   * @note Calls @c SSL_CTX_set_cookie_generate_cb.
+   */
+  template <typename CookieCallback>
+  ASIO_DECL void set_cookie_generate_callback(CookieCallback cb);
+
+  /// Set the callback used to generate dtls cookies
+  /**
+   * This function is used to specify a callback function that will be called
+   * by the implementation when it needs to generate a dtls cookie.
+   *
+   * @param callback The function object to be used for generating a cookie.
+   * The function signature of the handler must be:
+   * @code bool generate_callback(
+   *   asio::const_buffer &cookie // Out parameter A buffer containing a cookie
+   * ); @endcode
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @note Calls @c SSL_CTX_set_cookie_generate_cb.
+   */
+  template <typename CookieCallback>
+  ASIO_DECL asio::error_code set_cookie_generate_callback(
+      CookieCallback callback, asio::error_code &ec);
+
+  /// Set the callback used to verify dtls cookies
+  /**
+   * This function is used to specify a callback function that will be called
+   * by the implementation when it needs to verify a dtls cookie.
+   *
+   * @param callback The function object to be used for generating a cookie.
+   * The function signature of the handler must be:
+   * @code bool generate_callback(
+   *   asio::const_buffer & // A buffer containing a cookie
+   * ); @endcode
+   *
+   * @throws asio::system_error Thrown on failure.
+   *
+   * @note Calls @c SSL_CTX_set_cookie_generate_cb.
+   */
+  template <typename CookieCallback>
+  ASIO_DECL void set_cookie_verify_callback(CookieCallback cb);
+
+  /// Set the callback used to verify dtls cookies
+  /**
+   * This function is used to specify a callback function that will be called
+   * by the implementation when it needs to verify a dtls cookie.
+   *
+   * @param callback The function object to be used for generating a cookie.
+   * The function signature of the handler must be:
+   * @code bool generate_callback(
+   *   asio::const_buffer & // A buffer containing a cookie
+   * ); @endcode
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @note Calls @c SSL_CTX_set_cookie_generate_cb.
+   */
+  template <typename CookieCallback>
+  ASIO_DECL asio::error_code set_cookie_verify_callback(
+      CookieCallback cb, asio::error_code &ec);
+
   /// Set the peer verification mode.
   /**
    * This function may be used to configure the peer verification mode used by

@@ -84,6 +84,7 @@ context::context(context::method m)
     handle_ = ::SSL_CTX_new(::SSLv2_server_method());
     break;
 #endif // defined(OPENSSL_NO_SSL2)
+#if !defined(OPENSSL_NO_SSL3_METHOD)
   case context::sslv3:
     handle_ = ::SSL_CTX_new(::SSLv3_method());
     break;
@@ -93,6 +94,7 @@ context::context(context::method m)
   case context::sslv3_server:
     handle_ = ::SSL_CTX_new(::SSLv3_server_method());
     break;
+#endif // !defined(OPENSSL_NO_SSL3_METHOD)
   case context::tlsv1:
     handle_ = ::SSL_CTX_new(::TLSv1_method());
     break;
@@ -289,7 +291,6 @@ asio::error_code context::set_options(
   ec = asio::error_code();
   return ec;
 }
-
 void context::set_verify_mode(verify_mode v)
 {
   asio::error_code ec;
@@ -874,6 +875,42 @@ asio::error_code context::do_use_tmp_dh(
   ec = asio::error_code(
       static_cast<int>(::ERR_get_error()),
       asio::error::get_ssl_category());
+  return ec;
+}
+
+template <typename CookieCallback>
+void context::set_cookie_generate_callback(
+    CookieCallback callback)
+{
+  asio::error_code ec;
+  set_cookie_generate_callback(callback, ec);
+
+}
+
+template <typename CookieCallback>
+asio::error_code context::set_cookie_generate_callback(
+    CookieCallback callback, asio::error_code &ec)
+{
+  ::SSL_CTX_set_cookie_generate_cb(handle_, callback);
+  ec = asio::error_code();
+  return ec;
+}
+
+template <typename CookieCallback>
+void context::set_cookie_verify_callback(
+    CookieCallback callback)
+{
+  asio::error_code ec;
+  set_cookie_verify_callback(callback, ec);
+
+}
+
+template <typename CookieCallback>
+asio::error_code context::set_cookie_verify_callback(
+    CookieCallback callback, asio::error_code &ec)
+{
+  ::SSL_CTX_set_cookie_verify_cb(handle_, callback);
+  ec = asio::error_code();
   return ec;
 }
 

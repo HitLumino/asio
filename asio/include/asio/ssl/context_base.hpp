@@ -131,6 +131,9 @@ public:
 
   /// Disable compression. Compression is disabled by default.
   static const long no_compression = implementation_defined;
+
+  /// Require cookie exchange with dtls
+  static const long dtls_cookie_exchange = implementation_defined;
 #else
   ASIO_STATIC_CONSTANT(long, default_workarounds = SSL_OP_ALL);
   ASIO_STATIC_CONSTANT(long, single_dh_use = SSL_OP_SINGLE_DH_USE);
@@ -152,6 +155,7 @@ public:
 # else // defined(SSL_OP_NO_COMPRESSION)
   ASIO_STATIC_CONSTANT(long, no_compression = 0x20000L);
 # endif // defined(SSL_OP_NO_COMPRESSION)
+  ASIO_STATIC_CONSTANT(long, dtls_cookie_exchange = SSL_OP_COOKIE_EXCHANGE);
 #endif
 
   /// File format types.
